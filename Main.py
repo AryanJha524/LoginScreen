@@ -1,4 +1,5 @@
-import os, json
+import json
+import os
 
 # instantiate file with a empty list if file is empty
 file_size = os.path.getsize("UserPass.json")
@@ -46,6 +47,7 @@ def write_user(u_name, p_word):
         json.dump(list_of_users, f)
 
 
+"""Program begins"""
 choice = str(input("Would you like to login or create an account? (Login/Create)\n")).lower()
 if choice == "create":
     username = str(input("Please enter a user name: "))
