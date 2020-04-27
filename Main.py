@@ -34,6 +34,7 @@ def check_password(u_name, p_word):
                     return True
                 else:
                     return False
+    f.close()
 
 
 def write_user(u_name, p_word):
@@ -44,8 +45,10 @@ def write_user(u_name, p_word):
         new_user = {'username': u_name, 'password': p_word}
         list_of_users = json.load(f)
         list_of_users.append(new_user)
+    f.close()
     with open('UserPass.json', 'w') as f:
         json.dump(list_of_users, f)
+    f.close()
 
 
 def create_new_user():
@@ -80,7 +83,7 @@ def existing_user():
         counter += 1
         if counter >= 3:
             print("Invalid amount of tries. Exiting...\n")
-            os._exit(1)
+            sys.exit()
         print("Sorry, your password is incorrect\nYou have " + str(3 - counter) + " tries left")
         password = str(input("Please enter your password again: "))
 
@@ -99,5 +102,4 @@ while choice != "exit":
         sys.exit()
     else:
         print("Invalid command. Please try again.")
-
 sys.exit()
