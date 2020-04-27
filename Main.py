@@ -1,5 +1,6 @@
 import json
 import os
+import sys
 
 # instantiate file with a empty list if file is empty
 file_size = os.path.getsize("UserPass.json")
@@ -47,40 +48,56 @@ def write_user(u_name, p_word):
         json.dump(list_of_users, f)
 
 
-"""Program begins"""
-choice = str(input("Would you like to login or create an account? (Login/Create)\n")).lower()
-if choice == "create":
-    username = str(input("Please enter a user name: "))
-    while check_existing_user(username):
+def create_new_user():
+    """Creates a new user and validates"""
+    new_username = str(input("Please enter a user name: "))
+    while check_existing_user(new_username):
         print("That username already exists, please try another")
-        username = str(input("Please enter a user name: "))
+        new_username = str(input("Please enter a user name: "))
 
     # username doesnt exist, continue with creating a new user
-    password = str(input("Please enter a password: "))
+    new_password = str(input("Please enter a password: "))
     temp_password = str(input("Please confirm your password: "))
-    while password != temp_password:
+    while new_password != temp_password:
         print("Passwords did not match please try again")
         temp_password = str(input("Please confirm your password: "))
 
-    if password == temp_password:
+    if new_password == temp_password:
         print("Creating new user....")
-        write_user(username, password)
+        write_user(new_username, new_password)
 
-elif choice == "login":
+
+def existing_user():
+    """Saved users can login"""
     username = str(input("Please enter your username: "))
-    while not(check_existing_user(username)):
+    while not check_existing_user(username):
         print("Sorry, your username was not found")
         username = str(input("Please enter your username again: "))
 
     password = str(input("Please enter your password: "))
     counter = 0
-    while not(check_password(username, password)):
+    while not (check_password(username, password)):
         counter += 1
         if counter >= 3:
             print("Invalid amount of tries. Exiting...\n")
             os._exit(1)
-        print("Sorry, your password is incorrect\nYou have " + str(3-counter) + " tries left")
+        print("Sorry, your password is incorrect\nYou have " + str(3 - counter) + " tries left")
         password = str(input("Please enter your password again: "))
 
     # successful login performed
     print("\nWelcome " + username + "!")
+
+
+"""Program begins"""
+choice = ""
+while choice != "exit":
+    choice = str(input("Would you like to login, create an account, or exit? (Login/Create/Exit)\n")).lower()
+    if choice == "create":
+        create_new_user()
+    elif choice == "login":
+        existing_user()
+        sys.exit()
+    else:
+        print("Invalid command. Please try again.")
+
+sys.exit()
